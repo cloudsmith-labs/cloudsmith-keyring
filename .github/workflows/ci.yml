@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# only-system stops uv downloading its own interpreter and testing a version
+# mise never selected.
+env:
+  UV_PYTHON_PREFERENCE: only-system
+
+jobs:
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    # Job-scoped, not step-scoped: every `mise exec` below has to see this.
+    # As a step-level env on the setup action alone it applied to that step
+    # only, and the later steps silently fell back to mise.toml's pinned
+    # version — so all five matrix legs tested the same interpreter.
+    env:
+      MISE_PYTHON_VERSION: ${{ matrix.python-version }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+
+      # Asserts rather than prints: a version mismatch here means the matrix
+      # is not testing what it claims to, which is exactly the failure this
+      # job is meant to catch.
+      - name: Confirm mise resolved the requested Python
+        env:
+          EXPECTED_PYTHON: ${{ matrix.python-version }}
+        run: |
+          resolved="$(mise exec -- python -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+          echo "mise resolved Python $resolved (expected $EXPECTED_PYTHON)"
+          if [ "$resolved" != "$EXPECTED_PYTHON" ]; then
+            echo "::error::matrix leg $EXPECTED_PYTHON actually ran Python $resolved"
+            exit 1
+          fi
+
+      # `--python` is explicit because MISE_PYTHON_VERSION alone is not
+      # enough: uv does its own interpreter discovery and, satisfying only
+      # `requires-python = ">=3.10"`, will happily build the venv with a
+      # newer Python it finds on the system. Verified locally — without
+      # this, the 3.10 leg resolved mise's 3.10 and then tested on 3.14.
+      - name: Install dependencies
+        run: mise exec -- uv sync --locked --group dev --python "$(mise which python)"
+
+      # Re-checked inside the venv: `uv sync` picks the interpreter, and a
+      # stale .venv or a resolver fallback could still run a different one.
+      - name: Confirm the virtualenv uses the same Python
+        env:
+          EXPECTED_PYTHON: ${{ matrix.python-version }}
+        run: |
+          resolved="$(mise exec -- uv run python -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+          echo "venv Python $resolved (expected $EXPECTED_PYTHON)"
+          if [ "$resolved" != "$EXPECTED_PYTHON" ]; then
+            echo "::error::venv runs Python $resolved, not $EXPECTED_PYTHON"
+            exit 1
+          fi
+
+      - name: Run the test suite
+        run: mise exec -- uv run pytest -v
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+
+      - name: Install dependencies
+        run: mise exec -- uv sync --locked --group dev
+
+      # prek runs .pre-commit-config.yaml; it comes from mise, so there is no
+      # hook runner in the Python dev dependencies.
+      - name: Run the hooks
+        run: mise exec -- prek run --all-files --show-diff-on-failure
+
+  build:
+    name: Build distributions
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+        with:
+          # A poisoned cache entry restored here would end up in a release artifact.
+          cache: false
+
+      - name: Build the sdist and wheel
+        run: mise exec -- uv build
+
+      - name: Check the distribution metadata
+        run: mise exec -- uvx twine check --strict dist/*

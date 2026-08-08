@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cloudsmith-keyring"
+version = "0.1.0"
+description = "A keyring backend that authenticates pip/twine to Cloudsmith by shelling out to the cloudsmith CLI"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Cloudsmith Ltd" },
+]
+keywords = ["cloudsmith", "keyring", "pip", "twine", "artifact-repository"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Software Distribution",
+]
+dependencies = [
+    "keyring>=23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/cloudsmith-labs/cloudsmith-keyring"
+Repository = "https://github.com/cloudsmith-labs/cloudsmith-keyring"
+
+[project.entry-points."keyring.backends"]
+cloudsmith = "cloudsmith_keyring.backend"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cloudsmith_keyring"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "W",   # pycodestyle warnings
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cloudsmith_keyring"]

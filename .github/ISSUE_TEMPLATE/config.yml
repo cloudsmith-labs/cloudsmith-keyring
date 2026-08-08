@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Cloudsmith Documentation
+    url: https://help.cloudsmith.io/
+    about: Check the official Cloudsmith documentation
+  - name: Cloudsmith CLI
+    url: https://github.com/cloudsmith-io/cloudsmith-cli
+    about: This backend shells out to the CLI — report CLI issues there
+  - name: Cloudsmith Support
+    url: https://cloudsmith.io/support/
+    about: Contact Cloudsmith support for account-specific issues

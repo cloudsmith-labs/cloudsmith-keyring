@@ -1,0 +1,3 @@
+--index-url https://token@dl.cloudsmith.io/basic/iduffy-demo/cloudsmith-keyring/python/simple/
+
+cloudsmith-keyring-example

@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "domains": [
+        {
+            "host": "dl.cloudsmith.io",
+            "format": null,
+            "type": "default",
+            "domain_type": "download",
+            "org": null,
+            "repository": null,
+            "primary": true,
+            "created_at": null
+        }
+    ]
+}

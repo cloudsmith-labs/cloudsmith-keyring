@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cloudsmith-keyring-example"
+version = "0.1.0"
+description = "A throwaway package used by the cloudsmith-keyring examples to exercise upload/install against Cloudsmith"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Cloudsmith Ltd" },
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cloudsmith_keyring_example"]

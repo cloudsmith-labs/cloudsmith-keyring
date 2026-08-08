@@ -1,0 +1,12 @@
+[project]
+name = "cloudsmith-keyring-uv-example"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["cloudsmith-keyring-example"]
+
+[tool.uv]
+keyring-provider = "subprocess"
+
+[[tool.uv.index]]
+name = "cloudsmith"
+url = "https://token@dl.cloudsmith.io/basic/iduffy-demo/cloudsmith-keyring/python/simple/"
