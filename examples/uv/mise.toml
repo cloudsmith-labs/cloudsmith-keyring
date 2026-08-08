@@ -1,0 +1,30 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[env]
+# Temporary: see ../README.md#prerequisites.
+CLOUDSMITH_CLI_REQUIREMENT = "git+https://github.com/cloudsmith-io/cloudsmith-cli.git@custom-domains"
+
+[tasks.install]
+description = "Create a throwaway venv with cloudsmith-keyring and the CLI for uv's subprocess keyring provider"
+run = """
+uv venv --no-config .venv-keyring --clear
+uv pip install --no-config --python .venv-keyring/bin/python -e ../.. keyring "$CLOUDSMITH_CLI_REQUIREMENT"
+"""
+
+[tasks.sync]
+description = "uv sync the example project against Cloudsmith (set CLOUDSMITH_ORG/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION to pin a version)"
+depends = ["install"]
+run = '''
+export PATH="$PWD/.venv-keyring/bin:$PATH"
+
+project="$(mktemp -d)"
+sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_ORG:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" pyproject.toml > "$project/pyproject.toml"
+if [ -n "${EXAMPLE_VERSION:-}" ]; then
+  sed -i "s/\"cloudsmith-keyring-example\"/\"cloudsmith-keyring-example==${EXAMPLE_VERSION}\"/" "$project/pyproject.toml"
+fi
+
+uv sync --project "$project"
+uv run --project "$project" python -c "import cloudsmith_keyring_example as m; print(m.greet())"
+'''

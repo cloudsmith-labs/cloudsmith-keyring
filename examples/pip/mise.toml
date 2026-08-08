@@ -1,0 +1,30 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[env]
+# Temporary: see ../README.md#prerequisites.
+CLOUDSMITH_CLI_REQUIREMENT = "git+https://github.com/cloudsmith-io/cloudsmith-cli.git@custom-domains"
+
+[tasks.install]
+description = "Create a throwaway venv with cloudsmith-keyring, the CLI, and real pip"
+run = """
+uv venv .venv --clear
+uv pip install --python .venv/bin/python -e ../.. keyring "$CLOUDSMITH_CLI_REQUIREMENT" pip
+"""
+
+[tasks.install-example]
+description = "pip install the example package from Cloudsmith (set CLOUDSMITH_ORG/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION to pin a version)"
+depends = ["install"]
+run = """
+export PATH="$PWD/.venv/bin:$PATH"
+
+req="$(mktemp)"
+sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_ORG:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" requirements.txt > "$req"
+if [ -n "${EXAMPLE_VERSION:-}" ]; then
+  sed -i "s/^cloudsmith-keyring-example$/cloudsmith-keyring-example==${EXAMPLE_VERSION}/" "$req"
+fi
+
+pip install -r "$req"
+python -c "import cloudsmith_keyring_example as m; print(m.greet())"
+"""

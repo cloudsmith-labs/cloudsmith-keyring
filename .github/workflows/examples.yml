@@ -1,0 +1,134 @@
+name: Examples
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: examples-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UV_PYTHON_PREFERENCE: only-system
+  CLOUDSMITH_ORG: ${{ secrets.CLOUDSMITH_ORG }}
+  CLOUDSMITH_REPO: ${{ secrets.CLOUDSMITH_REPO }}
+  # Authenticates the `cloudsmith` CLI via GitHub's OIDC token, exchanged for
+  # a short-lived Cloudsmith API key — no long-lived API key stored. Requires
+  # the `id-token: write` permission granted per job below, and a Cloudsmith
+  # service account configured to trust this repository's OIDC claims.
+  CLOUDSMITH_SERVICE_SLUG: ${{ secrets.CLOUDSMITH_SERVICE_SLUG }}
+
+jobs:
+  twine:
+    name: twine (upload)
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # exchanged for a Cloudsmith token via OIDC (see the env block above)
+    outputs:
+      version: ${{ steps.publish.outputs.version }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+        with:
+          working_directory: examples/twine
+
+      # Every run needs a version Cloudsmith hasn't seen: this repository
+      # does not support twine's --skip-existing, so re-uploading a version
+      # that already exists is a hard failure, not a no-op.
+      - name: Build and upload a uniquely-versioned example package
+        id: publish
+        working-directory: examples/twine
+        env:
+          EXAMPLE_VERSION: 0.1.${{ github.run_id }}.${{ github.run_attempt }}
+        run: |
+          mise run publish
+          echo "version=${EXAMPLE_VERSION}" >> "$GITHUB_OUTPUT"
+
+  pip:
+    name: pip (install)
+    needs: twine
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # exchanged for a Cloudsmith token via OIDC (see the env block above)
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+        with:
+          working_directory: examples/pip
+
+      - name: pip install the example package from Cloudsmith
+        working-directory: examples/pip
+        env:
+          EXAMPLE_VERSION: ${{ needs.twine.outputs.version }}
+        run: mise run install-example
+
+  uv:
+    name: uv (sync)
+    needs: twine
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # exchanged for a Cloudsmith token via OIDC (see the env block above)
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+        with:
+          working_directory: examples/uv
+
+      - name: uv sync the example project against Cloudsmith
+        working-directory: examples/uv
+        env:
+          EXAMPLE_VERSION: ${{ needs.twine.outputs.version }}
+        run: mise run sync
+
+  pip-tools:
+    name: pip-tools (compile)
+    needs: twine
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # exchanged for a Cloudsmith token via OIDC (see the env block above)
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain with mise
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+        with:
+          working_directory: examples/pip-tools
+
+      - name: pip-compile the example requirements against Cloudsmith
+        working-directory: examples/pip-tools
+        env:
+          EXAMPLE_VERSION: ${{ needs.twine.outputs.version }}
+        run: mise run compile

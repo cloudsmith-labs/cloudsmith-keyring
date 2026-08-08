@@ -1,0 +1,30 @@
+[tools]
+python = "3.14"
+uv = "latest"
+gitleaks = "8.30.1"
+prek = "0.4.11"
+
+[env]
+UV_PROJECT_ENVIRONMENT = ".venv"
+
+[tasks.install]
+description = "Sync the virtualenv from the lockfile, including dev tools"
+run = "uv sync --locked --group dev"
+
+[tasks.test]
+description = "Run the test suite"
+depends = ["install"]
+run = "uv run pytest"
+
+[tasks.lint]
+description = "Run every check CI runs"
+depends = ["install"]
+run = "prek run --all-files"
+
+[tasks.hooks]
+description = "Install the git hooks so the checks run before each commit"
+run = "prek install"
+
+[tasks.secrets]
+description = "Scan the whole working tree and history for secrets"
+run = ["gitleaks dir --redact --verbose .", "gitleaks git --redact ."]

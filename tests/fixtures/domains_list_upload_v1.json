@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "domains": [
+        {
+            "host": "python.cloudsmith.io",
+            "format": "python",
+            "type": "default",
+            "domain_type": "native_api",
+            "org": null,
+            "repository": null,
+            "primary": true,
+            "created_at": null
+        }
+    ]
+}

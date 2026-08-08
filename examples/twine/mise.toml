@@ -1,0 +1,32 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[env]
+# Temporary: see ../README.md#prerequisites.
+CLOUDSMITH_CLI_REQUIREMENT = "git+https://github.com/cloudsmith-io/cloudsmith-cli.git@custom-domains"
+
+[tasks.install]
+description = "Create a throwaway venv with cloudsmith-keyring, the CLI, build, and twine"
+run = """
+uv venv .venv --clear
+uv pip install --python .venv/bin/python -e ../.. keyring "$CLOUDSMITH_CLI_REQUIREMENT" build twine
+"""
+
+[tasks.publish]
+description = "Build examples/example-package and upload it to Cloudsmith (set CLOUDSMITH_ORG/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION for a unique, non-conflicting version)"
+depends = ["install"]
+run = '''
+export PATH="$PWD/.venv/bin:$PATH"
+
+if [ -n "${EXAMPLE_VERSION:-}" ]; then
+  sed -i "s/^version = \"0.1.0\"/version = \"${EXAMPLE_VERSION}\"/" ../example-package/pyproject.toml
+fi
+
+pypirc="$(mktemp)"
+sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_ORG:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" .pypirc > "$pypirc"
+
+rm -rf dist
+python -m build --outdir dist ../example-package
+twine upload --config-file "$pypirc" -r cloudsmith dist/*
+'''
