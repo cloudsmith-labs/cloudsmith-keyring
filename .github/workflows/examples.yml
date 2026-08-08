@@ -47,7 +47,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
 
       - name: Install cloudsmith-keyring and the example's build/upload tools
         run: |
@@ -86,7 +86,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
 
       - name: Install cloudsmith-keyring, the CLI, and real pip
         run: |
@@ -118,7 +118,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
 
       # `uv`'s subprocess keyring provider shells out to a `keyring` on
       # PATH rather than using the project's own venv, so cloudsmith-keyring
@@ -157,7 +157,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
 
       # pip-tools 7.6.0 does not support pip 24.1+ (see examples/pip-tools/README.md).
       - name: Install cloudsmith-keyring, the CLI, and pip-tools
