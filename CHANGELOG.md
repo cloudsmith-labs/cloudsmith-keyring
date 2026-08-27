@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `pip-tools` authenticating to a Cloudsmith repository through
   `cloudsmith-keyring`, exercised on every push and pull request by the
   `Examples` GitHub Actions workflow. Each example targets a demo repository
-  by default but reads `CLOUDSMITH_ORG`/`CLOUDSMITH_REPO` to target a
+  by default but reads `CLOUDSMITH_WORKSPACE`/`CLOUDSMITH_REPO` to target a
   different one, substituted into its config at run time so nothing needs
   editing by hand.
+- Documentation and examples now use `CLOUDSMITH_WORKSPACE`, the preferred
+  spelling in Cloudsmith CLI 1.26.0 and later. The CLI continues to accept
+  `CLOUDSMITH_ORG` for compatibility.
 
 ### Changed
 

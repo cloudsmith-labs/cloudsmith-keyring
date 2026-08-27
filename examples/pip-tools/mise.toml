@@ -14,13 +14,13 @@ uv pip install --python .venv/bin/python -e ../.. keyring "$CLOUDSMITH_CLI_REQUI
 """
 
 [tasks.compile]
-description = "pip-compile requirements.in against Cloudsmith (set CLOUDSMITH_ORG/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION to pin a version)"
+description = "pip-compile requirements.in against Cloudsmith (set CLOUDSMITH_WORKSPACE/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION to pin a version)"
 depends = ["install"]
 run = """
 export PATH="$PWD/.venv/bin:$PATH"
 
 src="$(mktemp)"
-sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_ORG:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" requirements.in > "$src"
+sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_WORKSPACE:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" requirements.in > "$src"
 if [ -n "${EXAMPLE_VERSION:-}" ]; then
   sed -i "s/^cloudsmith-keyring-example$/cloudsmith-keyring-example==${EXAMPLE_VERSION}/" "$src"
 fi

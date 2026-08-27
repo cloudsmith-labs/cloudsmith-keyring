@@ -17,7 +17,7 @@ concurrency:
 
 env:
   UV_PYTHON_PREFERENCE: only-system
-  CLOUDSMITH_ORG: ${{ secrets.CLOUDSMITH_ORG }}
+  CLOUDSMITH_WORKSPACE: ${{ secrets.CLOUDSMITH_ORG }}
   CLOUDSMITH_REPO: ${{ secrets.CLOUDSMITH_REPO }}
   # Authenticates the `cloudsmith` CLI via GitHub's OIDC token, exchanged for
   # a short-lived Cloudsmith API key — no long-lived API key stored. Requires

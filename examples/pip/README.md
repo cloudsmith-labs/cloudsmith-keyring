@@ -14,12 +14,12 @@ comes from `keyring` at install time.
 touches your own environment.
 
 ```sh
-export CLOUDSMITH_ORG=iduffy-demo
+export CLOUDSMITH_WORKSPACE=iduffy-demo
 
 mise run install-example
 ```
 
-Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_ORG` to run this against a
+Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_WORKSPACE` to run this against a
 repository you control instead of the demo one; `install-example`
 substitutes both into `requirements.txt` at run time, so the file itself
 never needs editing.

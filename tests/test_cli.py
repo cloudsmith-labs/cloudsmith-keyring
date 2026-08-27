@@ -361,11 +361,11 @@ def test_fetch_cloudsmith_domains_empty_set_on_old_data_shape(monkeypatch):
 
 
 def test_fetch_cloudsmith_domains_invokes_domains_list_with_expected_filters(monkeypatch):
-    """The CLI resolves the organisation itself, from CLOUDSMITH_ORG or config.ini.
+    """The CLI resolves the Workspace itself from its environment or config.
 
-    Regression test: ``domains list`` has no ``--org`` option, so passing one
-    would make the CLI exit non-zero and leave the backend with no trusted
-    hosts at all.
+    Regression test: the keyring backend should not pass a Workspace option,
+    because the CLI inherits ``CLOUDSMITH_WORKSPACE`` or reads its config and
+    adding a separate value here could make the two sources disagree.
     """
     captured_args = []
 

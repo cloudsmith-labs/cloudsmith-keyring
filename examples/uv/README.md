@@ -16,12 +16,12 @@ invoked from `uv`'s `subprocess` provider, not by this project's own venv,
 so its `bin/` goes on `PATH` before `uv sync` runs.
 
 ```sh
-export CLOUDSMITH_ORG=iduffy-demo
+export CLOUDSMITH_WORKSPACE=iduffy-demo
 
 mise run sync
 ```
 
-Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_ORG` to run this against a
+Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_WORKSPACE` to run this against a
 repository you control instead of the demo one; `sync` substitutes both
 into a copy of `pyproject.toml` at run time, so the file itself never needs
 editing.

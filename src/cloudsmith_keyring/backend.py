@@ -65,7 +65,7 @@ class CloudsmithKeyringBackend(keyring.backend.KeyringBackend):
         self._cloudsmith_hosts = None
 
     def get_credential(self, service, username):
-        del username  # a Cloudsmith token is organisation-wide
+        del username  # a Cloudsmith token is Workspace-wide
         return self._resolve_credential(service)
 
     def get_password(self, service, username):

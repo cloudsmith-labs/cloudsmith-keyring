@@ -195,11 +195,12 @@ def fetch_cloudsmith_domains(binary_path):
     """Run ``domains list`` and return the set of usable hosts.
 
     This is the single authoritative source for which hosts Cloudsmith can
-    authenticate. No organisation argument is passed: ``domains list`` has
-    no ``--org`` option, and resolves the organisation itself from
-    ``CLOUDSMITH_ORG`` (which the subprocess inherits) or from ``oidc_org``
-    in the CLI's own ``config.ini``. Without one it still returns the
-    built-in hosts, so an unset organisation must not skip this call.
+    authenticate. No Workspace argument is passed: ``domains list`` resolves
+    it from ``CLOUDSMITH_WORKSPACE`` (which the subprocess inherits) or from
+    ``workspace`` in the CLI's own ``config.ini``. Legacy environment-variable
+    and configuration-key aliases are also accepted. Without a Workspace it
+    still returns the built-in hosts, so an unset Workspace must not skip this
+    call.
 
     Two invocations cover the hosts pip and twine actually use: one filtered
     to ``--format python --domain-type native_api`` (the PyPI upload API

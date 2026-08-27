@@ -14,7 +14,7 @@ uv pip install --python .venv/bin/python -e ../.. keyring "$CLOUDSMITH_CLI_REQUI
 """
 
 [tasks.publish]
-description = "Build examples/example-package and upload it to Cloudsmith (set CLOUDSMITH_ORG/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION for a unique, non-conflicting version)"
+description = "Build examples/example-package and upload it to Cloudsmith (set CLOUDSMITH_WORKSPACE/CLOUDSMITH_REPO to target your own repository, EXAMPLE_VERSION for a unique, non-conflicting version)"
 depends = ["install"]
 run = '''
 export PATH="$PWD/.venv/bin:$PATH"
@@ -24,7 +24,7 @@ if [ -n "${EXAMPLE_VERSION:-}" ]; then
 fi
 
 pypirc="$(mktemp)"
-sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_ORG:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" .pypirc > "$pypirc"
+sed "s#iduffy-demo/cloudsmith-keyring#${CLOUDSMITH_WORKSPACE:-iduffy-demo}/${CLOUDSMITH_REPO:-cloudsmith-keyring}#" .pypirc > "$pypirc"
 
 rm -rf dist
 python -m build --outdir dist ../example-package
