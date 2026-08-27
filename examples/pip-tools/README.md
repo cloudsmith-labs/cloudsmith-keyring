@@ -14,12 +14,12 @@ alongside it.
 pair.
 
 ```sh
-export CLOUDSMITH_ORG=iduffy-demo
+export CLOUDSMITH_WORKSPACE=iduffy-demo
 
 mise run compile
 ```
 
-Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_ORG` to run this against a
+Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_WORKSPACE` to run this against a
 repository you control instead of the demo one; `compile` substitutes both
 into a copy of `requirements.in` at run time, so the file itself never needs
 editing.

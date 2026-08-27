@@ -13,12 +13,12 @@ any other configured repository.
 `cloudsmith-keyring`, the `cloudsmith` CLI, `build`, and `twine`.
 
 ```sh
-export CLOUDSMITH_ORG=iduffy-demo
+export CLOUDSMITH_WORKSPACE=iduffy-demo
 
 mise run publish
 ```
 
-Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_ORG` to run this against a
+Set `CLOUDSMITH_REPO` alongside `CLOUDSMITH_WORKSPACE` to run this against a
 repository you control instead of the demo one; `publish` substitutes both
 into a copy of `.pypirc` at run time, so the file itself never needs
 editing.

@@ -112,7 +112,7 @@ through `get_password`.
 | `CLOUDSMITH_CLI_PATH`        | (unset) | Explicit path to the `cloudsmith` executable, overriding `PATH` lookup via `shutil.which`. |
 | `CLOUDSMITH_KEYRING_TIMEOUT` | `30`    | Timeout, in seconds, for each `cloudsmith` CLI subprocess invocation. |
 | `CLOUDSMITH_KEYRING_TTL`     | `300`   | How long, in seconds, a resolved token is cached in-process per host before being re-fetched. Kept short because the credential-helper contract carries no `expires_at`. |
-| `CLOUDSMITH_ORG`             | (unset) | Required by the CLI when resolving an organisation's custom domains. |
+| `CLOUDSMITH_WORKSPACE`       | (unset) | Workspace slug used by CLI 1.26.0 or later when resolving custom domains. The legacy `CLOUDSMITH_ORG` variable is also accepted. |
 
 ## Priority
 
