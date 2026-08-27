@@ -4,7 +4,7 @@ uv = "latest"
 
 [env]
 # Temporary: see ../README.md#prerequisites.
-CLOUDSMITH_CLI_REQUIREMENT = "git+https://github.com/cloudsmith-io/cloudsmith-cli.git@custom-domains"
+CLOUDSMITH_CLI_REQUIREMENT = "git+https://github.com/cloudsmith-io/cloudsmith-cli.git@feat/workspace-option-alias"
 
 [tasks.install]
 description = "Create a throwaway venv with cloudsmith-keyring, the CLI, and pip-tools (needs pip<24.1, see ../README.md)"

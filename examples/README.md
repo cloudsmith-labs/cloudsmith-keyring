@@ -41,10 +41,11 @@ mise tasks     # see what's runnable
 mise run <task>
 ```
 
-**Temporary:** every example pins `cloudsmith-cli` to the branch that adds
-`domains list` (see each directory's `mise.toml`), since this backend needs
-that command to confirm a host is Cloudsmith-served and it hasn't shipped
-in a release yet.
+**Temporary:** every example pins `cloudsmith-cli` to the branch for
+[Cloudsmith CLI pull request #398](https://github.com/cloudsmith-io/cloudsmith-cli/pull/398)
+(see each directory's `mise.toml`), since this backend needs both
+`domains list` and the preferred `CLOUDSMITH_WORKSPACE` spelling before
+CLI 1.26.0 is released.
 
 1. `cloudsmith login`, or `CLOUDSMITH_API_KEY` in the environment. (CI uses
    OIDC instead — see below — which only auto-discovers in a supported CI
