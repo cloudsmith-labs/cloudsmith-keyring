@@ -5,8 +5,8 @@ and `twine upload` authenticate to [Cloudsmith](https://cloudsmith.io)
 repositories with **no credentials in the URL, no `pip.conf` entry, and no
 `~/.netrc`**.
 
-It works by shelling out to the [`cloudsmith`](https://pypi.org/project/cloudsmith-cli/)
-CLI's credential helper and parsing its JSON output.
+It runs the credential helper of the [`cloudsmith`](https://pypi.org/project/cloudsmith-cli/)
+CLI and reads its JSON output.
 
 `cloudsmith-keyring` is deliberately a small, separate package from the full
 `cloudsmith-cli`. A keyring backend only works if it is importable from the
@@ -15,7 +15,7 @@ virtualenv. Installing the full CLI into every one of those would pull in
 click, requests and the Cloudsmith SDK along with their transitive pins,
 adding weight and risking resolver conflicts with the project's own
 dependencies. Keeping this package to a single dependency avoids both. The
-CLI does the heavy lifting; this package only needs to find it and invoke it.
+CLI does the work; this package only finds the CLI and runs it.
 
 ## How it works
 
@@ -35,7 +35,7 @@ CLI does the heavy lifting; this package only needs to find it and invoke it.
 
 If the `cloudsmith` CLI is not installed, is not on `PATH`, exits non-zero,
 times out, or produces output that can't be parsed, the backend returns
-`None` silently. **A user without the CLI installed observes no behaviour
+`None` silently. **A user without the CLI installed observes no behavior
 change at all**.
 
 ## Installation
@@ -54,7 +54,7 @@ virtualenv as `cloudsmith-keyring`. It just needs to be resolvable on
 ### `pip install` from a Cloudsmith Python index
 
 ```sh
-pip install --index-url https://dl.cloudsmith.io/basic/<org>/<repo>/python/simple/ <package>
+pip install --index-url https://dl.cloudsmith.io/basic/<workspace>/<repo>/python/simple/ <package>
 ```
 
 No username, password, or token in the URL required — `cloudsmith-keyring`
@@ -63,7 +63,7 @@ supplies them transparently via `keyring`.
 ### `twine upload`
 
 ```sh
-twine upload --repository-url https://python.cloudsmith.io/<org>/<repo>/ dist/*
+twine upload --repository-url https://python.cloudsmith.io/<workspace>/<repo>/ dist/*
 ```
 
 Again, no `TWINE_USERNAME`/`TWINE_PASSWORD` needed. `twine` calls
@@ -95,7 +95,7 @@ missing:
 ```toml
 [[tool.uv.index]]
 name = "cloudsmith"
-url = "https://token@dl.cloudsmith.io/basic/<org>/<repo>/python/simple/"
+url = "https://token@dl.cloudsmith.io/basic/<workspace>/<repo>/python/simple/"
 ```
 
 `token` here is a username, not a secret: it is the fixed username
@@ -111,8 +111,8 @@ through `get_password`.
 |------------------------------|---------|--------------|
 | `CLOUDSMITH_CLI_PATH`        | (unset) | Explicit path to the `cloudsmith` executable, overriding `PATH` lookup via `shutil.which`. |
 | `CLOUDSMITH_KEYRING_TIMEOUT` | `30`    | Timeout, in seconds, for each `cloudsmith` CLI subprocess invocation. |
-| `CLOUDSMITH_KEYRING_TTL`     | `300`   | How long, in seconds, a resolved token is cached in-process per host before being re-fetched. Kept short because the credential-helper contract carries no `expires_at`. |
-| `CLOUDSMITH_WORKSPACE`       | (unset) | Workspace slug used by CLI 1.26.0 or later when resolving custom domains. |
+| `CLOUDSMITH_KEYRING_TTL`     | `300`   | How long, in seconds, a resolved token is cached in-process per host before being re-fetched. Kept short because the credential helper output carries no `expires_at`. |
+| `CLOUDSMITH_WORKSPACE`       | (unset) | The workspace slug that CLI 1.26.0 or later uses to resolve custom domains. |
 
 ## Priority
 

@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: Feature request
 about: Suggest a new feature or improvement
 title: "[FEATURE] "
 labels: enhancement
@@ -9,15 +9,15 @@ labels: enhancement
 
 <!-- What are you trying to do that is difficult or impossible today? -->
 
-## Proposed Solution
+## Proposed solution
 
 <!-- What you would like to see happen -->
 
-## Alternatives Considered
+## Alternatives considered
 
 <!-- Other approaches you have thought about, and why they fall short -->
 
-## Scope Check
+## Scope check
 
 <!--
 This package is deliberately tiny: `keyring` is its only runtime dependency,
@@ -30,6 +30,6 @@ If your request would add a runtime dependency, say why it cannot live in
 the CLI instead.
 -->
 
-## Additional Context
+## Additional context
 
 <!-- Anything else that would help -->

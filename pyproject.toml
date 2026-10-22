@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "cloudsmith-keyring"
 version = "0.1.0"
-description = "A keyring backend that authenticates pip/twine to Cloudsmith by shelling out to the cloudsmith CLI"
+description = "A keyring backend that authenticates pip/twine to Cloudsmith by running the cloudsmith CLI"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"

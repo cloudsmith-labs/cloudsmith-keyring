@@ -9,7 +9,7 @@ Installs [`cloudsmith-keyring-example`](../example-package/) from the
 (safe to commit — see the main [README](../../README.md#uv)); the password
 comes from `keyring` at install time.
 
-`mise.toml` installs Python and `uv`, then wires up a throwaway venv with
+`mise.toml` installs Python and `uv`, then sets up a throwaway venv with
 `cloudsmith-keyring`, the `cloudsmith` CLI, and real `pip` — nothing here
 touches your own environment.
 

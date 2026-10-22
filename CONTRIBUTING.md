@@ -93,7 +93,7 @@ run is a good predictor of CI passing.
 `pre-commit` itself still works against the same config if you prefer it,
 but prek is what mise installs and what CI runs.
 
-### Secret scanning has a sharp edge
+### What the lint job does not scan for secrets
 
 The `gitleaks` hook scans **staged** content only, so it guards commits but
 reads nothing under `prek run --all-files`. Do not read a green lint job as
@@ -104,14 +104,12 @@ can run them locally with:
 mise run secrets       # gitleaks over the working tree and the full history
 ```
 
-## Pull requests
+## Commit messages and pull requests
 
 - Keep changes focused; unrelated formatting or refactors make review
   harder.
-- Add or update tests for any behaviour change — the suite is the contract
+- Add or update tests for any behavior change — the suite is the contract
   this package's silent-failure guarantees are held to.
-
-## Commit messages and pull requests
 
 Write commit messages and pull request titles as
 [Conventional Commits](https://www.conventionalcommits.org/), for example

@@ -1,10 +1,11 @@
 # cloudsmith-keyring-example
 
-A trivial, throwaway package with no purpose beyond existing: the
-`examples/` walkthroughs build it, upload it to a Cloudsmith repository
-with `twine`, and then install it back down with `pip`, `uv`, and
-`pip-compile` to prove `cloudsmith-keyring` supplies credentials for all
-four tools without any of them touching a secret directly.
+A trivial, throwaway package that exists only for the `examples/`
+walkthroughs. The `twine` example builds it and uploads a new version to a
+Cloudsmith repository. The `pip`, `uv`, and `pip-tools` examples install its
+version 0.1.0 from the same repository. Together they show that
+`cloudsmith-keyring` supplies credentials for all four tools without any of
+them touching a secret directly.
 
-It is not published anywhere permanent and has no relation to
-`cloudsmith-keyring` itself beyond being used to demonstrate it.
+The package has no relation to `cloudsmith-keyring` itself beyond being used
+to demonstrate it.
