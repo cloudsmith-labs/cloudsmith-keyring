@@ -2,7 +2,7 @@
 name = "cloudsmith-keyring-uv-example"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["cloudsmith-keyring-example"]
+dependencies = ["cloudsmith-keyring-example==0.1.0"]
 
 [tool.uv]
 keyring-provider = "subprocess"

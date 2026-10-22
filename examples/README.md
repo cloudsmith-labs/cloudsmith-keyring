@@ -17,8 +17,9 @@ example's config at run time, so nothing in `pip/`, `twine/`, `uv/`, or
 `pip-tools/` needs editing by hand.
 
 [`example-package/`](./example-package/) is the throwaway package the
-`twine` example uploads and the `pip`/`uv`/`pip-tools` examples install back
-down.
+`twine` example uploads. The `pip`/`uv`/`pip-tools` examples install its
+version 0.1.0, which must already be in the repository. A new upload can take
+time to become installable, so these examples do not install it.
 
 [`.github/workflows/examples.yml`](../.github/workflows/examples.yml) runs
 all four on every push and pull request, authenticating the `cloudsmith` CLI
