@@ -67,6 +67,6 @@ Initial release.
 
 `requires-python` is `>=3.10`, matching the floor of current `pip` and
 `twine` — the tools this backend exists to serve. Development uses the
-newest release (see `mise.toml`); CI covers 3.10 through 3.14.
+newest release (see `mise.toml`); CI covers 3.11 through 3.14.
 
 [0.1.0]: https://github.com/cloudsmith-labs/cloudsmith-keyring/releases/tag/v0.1.0
