@@ -23,9 +23,37 @@ jobs:
 
     steps:
       - name: Run release-please
+        id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
           # CI does not run on a PR that the default token opens. The Cloudsmith Bot token fixes that.
           token: ${{ secrets.CLOUDSMITH_BOT_PR_TOKEN || github.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # release-please makes its commit through the GitHub API, so the commit is not signed.
+      # The ruleset of main requires signed commits.
+      - name: Check out the release PR
+        if: steps.release.outputs.pr != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+          token: ${{ secrets.CLOUDSMITH_BOT_PR_TOKEN }}
+          persist-credentials: true # the next step pushes the signed commit
+
+      - name: Sign the release commit as Cloudsmith Bot
+        if: steps.release.outputs.pr != ''
+        env:
+          SSH_SIGNING_KEY: ${{ secrets.CLOUDSMITH_BOT_SSH_KEY }}
+          BRANCH: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+        run: |
+          set -euo pipefail
+          key_file="$(mktemp)"
+          trap 'rm -f "${key_file}"' EXIT
+          printf '%s\n' "${SSH_SIGNING_KEY}" > "${key_file}"
+          git config user.name "Cloudsmith Bot"
+          git config user.email "10886281+cloudsmith-bot@users.noreply.github.com"
+          git config gpg.format ssh
+          git config user.signingkey "${key_file}"
+          git commit --amend --no-edit --gpg-sign
+          git push --force-with-lease "origin" "HEAD:${BRANCH}"
