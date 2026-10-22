@@ -16,7 +16,7 @@
 - [ ] Tests cover the behaviour change (the suite is the contract this
       package's fail-silent guarantees are held to)
 - [ ] `mise run lint` and `mise run test` pass
-- [ ] `CHANGELOG.md` updated under `[Unreleased]` for any user-visible change
+- [ ] The PR title is a Conventional Commit (release-please builds the changelog from it)
 - [ ] No new runtime dependency (see CONTRIBUTING.md — `keyring` is the only one)
 
 ## Additional Notes
