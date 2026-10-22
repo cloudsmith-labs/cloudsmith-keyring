@@ -27,12 +27,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
 
     # Job-scoped, not step-scoped: every `mise exec` below has to see this.
     # As a step-level env on the setup action alone it applied to that step
     # only, and the later steps silently fell back to mise.toml's pinned
-    # version — so all five matrix legs tested the same interpreter.
+    # version — so all the matrix legs tested the same interpreter.
     env:
       MISE_PYTHON_VERSION: ${{ matrix.python-version }}
 
