@@ -9,7 +9,7 @@ covered in [the main README's `uv` section](../../README.md#uv) and set
 here in `pyproject.toml`: `keyring-provider = "subprocess"`, and a `token@`
 username in the index URL.
 
-`mise.toml` installs Python and `uv`, then wires up a *separate* throwaway
+`mise.toml` installs Python and `uv`, then sets up a *separate* throwaway
 venv (`.venv-keyring`) with `cloudsmith-keyring` and the `cloudsmith` CLI —
 `cloudsmith-keyring` and the CLI need to be resolvable by the `keyring`
 invoked from `uv`'s `subprocess` provider, not by this project's own venv,

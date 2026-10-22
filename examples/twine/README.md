@@ -9,7 +9,7 @@ command line.
 commit); `twine` asks `keyring` for the password the same way it would for
 any other configured repository.
 
-`mise.toml` installs Python and `uv`, then wires up a throwaway venv with
+`mise.toml` installs Python and `uv`, then sets up a throwaway venv with
 `cloudsmith-keyring`, the `cloudsmith` CLI, `build`, and `twine`.
 
 ```sh

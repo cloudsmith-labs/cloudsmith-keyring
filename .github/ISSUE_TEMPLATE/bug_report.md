@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: Bug report
 about: Report a bug or unexpected behavior
 title: "[BUG] "
 labels: bug
@@ -9,17 +9,17 @@ labels: bug
 
 <!-- A clear and concise description of what the bug is -->
 
-## Steps to Reproduce
+## Steps to reproduce
 
 1.
 2.
 3.
 
-## Expected Behavior
+## Expected behavior
 
 <!-- What you expected to happen -->
 
-## Actual Behavior
+## Actual behavior
 
 <!-- What actually happened -->
 
@@ -53,6 +53,6 @@ Most reports come down to one of these. Please paste the output:
 paste output here
 ```
 
-## Additional Context
+## Additional context
 
 <!-- Add any other context about the problem here -->

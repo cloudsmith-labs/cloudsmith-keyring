@@ -9,7 +9,7 @@ since `pip-tools` resolves through `pip`'s own internals.
 from `pip._internal.utils.compat`), so this example pins `pip<24.1`
 alongside it.
 
-`mise.toml` installs Python and `uv`, then wires up a throwaway venv with
+`mise.toml` installs Python and `uv`, then sets up a throwaway venv with
 `cloudsmith-keyring`, the `cloudsmith` CLI, and a `pip<24.1` + `pip-tools`
 pair.
 

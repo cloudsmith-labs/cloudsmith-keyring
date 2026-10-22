@@ -29,26 +29,29 @@ OIDC token for a Cloudsmith one using `CLOUDSMITH_WORKSPACE` and
 permission (granted per job) and a Cloudsmith service account already
 configured to trust this repository.
 
+## Prerequisites
+
+- [`mise`](https://mise.jdx.dev/). Each example's `mise.toml` installs
+  everything else.
+- `cloudsmith login`, or `CLOUDSMITH_API_KEY` in the environment. CI uses
+  OIDC instead (see above), which works only in a supported CI environment,
+  not a local shell.
+- `CLOUDSMITH_WORKSPACE` set, so the CLI can resolve the workspace's domains.
+  If it is unset, the examples use `iduffy-demo`. Set `CLOUDSMITH_REPO` as
+  well to use a different workspace and repository.
+
 ## Running an example
 
-Each of `pip/`, `twine/`, `uv/`, and `pip-tools/` has its own `mise.toml`:
-running any `mise run <task>` there installs Python, `uv`, and a throwaway
-venv with `cloudsmith-keyring` and the `cloudsmith` CLI — nothing needs
-installing by hand, and nothing touches your own environment. [`mise`](https://mise.jdx.dev/)
-itself is the only prerequisite. From any example directory:
+Each of `pip/`, `twine/`, `uv/`, and `pip-tools/` has its own `mise.toml`.
+Running any `mise run <task>` there installs Python, `uv`, and a throwaway
+venv with `cloudsmith-keyring` and the `cloudsmith` CLI. Nothing needs
+installing by hand, and nothing touches your own environment. From any
+example directory:
 
 ```sh
 mise tasks     # see what's runnable
 mise run <task>
 ```
-
-1. `cloudsmith login`, or `CLOUDSMITH_API_KEY` in the environment. (CI uses
-   OIDC instead — see below — which only auto-discovers in a supported CI
-   environment, not a local shell.)
-2. `CLOUDSMITH_WORKSPACE` set, so the CLI can resolve the Workspace's domains.
-   It defaults to `iduffy-demo` in the example config if unset; set
-   `CLOUDSMITH_REPO` alongside it to run against a different
-   Workspace/repository entirely.
 
 None of the examples put a token in a file, a URL, or a shell history —
 that's the entire point of this package.
