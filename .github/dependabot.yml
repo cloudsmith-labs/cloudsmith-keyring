@@ -1,22 +1,46 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    # A compromised release is usually caught and yanked within days.
-    cooldown:
-      default-days: 7
-    groups:
-      actions:
-        patterns: ["*"]
-
   - package-ecosystem: "uv"
+    cooldown:
+      default-days: 7
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      uv-all:
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
+      uv-major:
+        patterns: ["*"]
+        update-types:
+          - "major"
+      uv-security:
+        applies-to: security-updates
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "github-actions"
     cooldown:
       default-days: 7
+    directory: "/"
+    schedule:
+      interval: "weekly"
     groups:
-      dev-dependencies:
-        dependency-type: "development"
+      actions-all:
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
+      actions-major:
+        patterns: ["*"]
+        update-types:
+          - "major"
+      actions-security:
+        applies-to: security-updates
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
