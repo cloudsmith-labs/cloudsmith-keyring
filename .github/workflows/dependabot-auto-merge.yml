@@ -45,22 +45,26 @@ jobs:
           # register, because gh pr checks fails when it finds no checks.
           sleep 60
           gh pr checks "${PR_URL}" --required --watch --fail-fast
+          # The watch does not fail on a cancelled check.
+          ALL_PASSED="$(gh pr checks "${PR_URL}" --required --json bucket --jq 'all(.[]; .bucket == "pass" or .bucket == "skipping")')"
+          test "${ALL_PASSED}" = "true"
           BEHIND_BY="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${BASE_REF}...${HEAD_SHA}" --jq .behind_by)"
           echo "behind-by=${BEHIND_BY}" >> "${GITHUB_OUTPUT}"
 
-      # Cloudsmith Bot can bypass the up-to-date rule of main. A rebase
-      # makes sure that the checks ran against the latest main.
+      # The ruleset of main does not let auto-merge merge a branch that is
+      # behind main. A rebase runs the checks against the latest main.
       - name: Ask Dependabot to rebase
         if: steps.checks.outcome == 'success' && steps.checks.outputs.behind-by != '0'
         env:
           GH_TOKEN: ${{ secrets.CLOUDSMITH_BOT_PR_TOKEN }}
         run: gh pr comment "${PR_URL}" --body "@dependabot rebase"
 
-      - name: Approve and merge
+      # GitHub merges only when the ruleset of main is satisfied.
+      - name: Approve and enable auto-merge
         if: steps.checks.outcome == 'success' && steps.checks.outputs.behind-by == '0'
         env:
           GH_TOKEN: ${{ secrets.CLOUDSMITH_BOT_PR_TOKEN }}
         run: |
           set -euo pipefail
           gh pr review --approve "${PR_URL}"
-          gh pr merge --admin --squash --match-head-commit "${HEAD_SHA}" "${PR_URL}"
+          gh pr merge --auto --squash --match-head-commit "${HEAD_SHA}" "${PR_URL}"
