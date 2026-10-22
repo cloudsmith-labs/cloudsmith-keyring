@@ -33,11 +33,12 @@ jobs:
 
       # release-please makes its commit through the GitHub API, so the commit is not signed.
       # The ruleset of main requires signed commits.
+      # release-please names the release PR branch after the target branch.
       - name: Check out the release PR
         if: steps.release.outputs.pr != ''
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+          ref: release-please--branches--main
           token: ${{ secrets.CLOUDSMITH_BOT_PR_TOKEN }}
           persist-credentials: true # the next step pushes the signed commit
 
@@ -45,7 +46,6 @@ jobs:
         if: steps.release.outputs.pr != ''
         env:
           SSH_SIGNING_KEY: ${{ secrets.CLOUDSMITH_BOT_SSH_KEY }}
-          BRANCH: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
         run: |
           set -euo pipefail
           key_file="$(mktemp)"
@@ -56,4 +56,4 @@ jobs:
           git config gpg.format ssh
           git config user.signingkey "${key_file}"
           git commit --amend --no-edit --gpg-sign
-          git push --force-with-lease "origin" "HEAD:${BRANCH}"
+          git push --force-with-lease origin HEAD:release-please--branches--main
