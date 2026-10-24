@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@08ae2a091c038e1e05ec6f5115dc5c69d5a2a6b8 # v5.1.2
+        uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
 
       # Asserts rather than prints: a version mismatch here means the matrix
       # is not testing what it claims to, which is exactly the failure this
@@ -94,7 +94,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@08ae2a091c038e1e05ec6f5115dc5c69d5a2a6b8 # v5.1.2
+        uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
 
       - name: Install dependencies
         run: mise exec -- uv sync --locked --group dev
@@ -115,7 +115,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@08ae2a091c038e1e05ec6f5115dc5c69d5a2a6b8 # v5.1.2
+        uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
         with:
           # A poisoned cache entry restored here would end up in a release artifact.
           cache: false
