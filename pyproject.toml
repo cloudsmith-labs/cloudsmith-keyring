@@ -41,8 +41,8 @@ packages = ["src/cloudsmith_keyring"]
 
 [dependency-groups]
 dev = [
-    "pytest>=8",
-    "ruff>=0.17.2",
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
 ]
 
 [tool.ruff]
