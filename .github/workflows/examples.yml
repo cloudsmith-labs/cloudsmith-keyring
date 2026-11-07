@@ -40,7 +40,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         with:
           working_directory: examples/twine
 
@@ -67,7 +67,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         with:
           working_directory: examples/pip
 
@@ -89,7 +89,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         with:
           working_directory: examples/uv
 
@@ -111,7 +111,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up the toolchain with mise
-        uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         with:
           working_directory: examples/pip-tools
 
